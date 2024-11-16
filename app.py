@@ -21,5 +21,4 @@ def exchange_rates():
     rates = get_exchange_rates()
     return jsonify(rates)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
