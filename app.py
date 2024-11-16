@@ -5,7 +5,11 @@ from selenium.webdriver.common.by import By
 app = Flask(__name__)
 
 def get_exchange_rates():
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument('--headless')  # Headless mod
+    options.add_argument('--no-sandbox')  # Bazı sunucu kısıtlamaları için
+    options.add_argument('--disable-dev-shm-usage')  # Düşük bellek kullanımı için
+    driver = webdriver.Chrome(options=options)
     try:
         driver.get("https://www.ziraatbank.com.tr/tr")
         dolar_alis = driver.find_element(By.XPATH, "//h3[text()='BANKA ALIŞ']/following-sibling::span").text.strip()
