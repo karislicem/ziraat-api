@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By  # By modülünü içe aktarıyoruz
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 import chromedriver_autoinstaller  # ChromeDriver'ı otomatik kurar
 import time
