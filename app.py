@@ -50,37 +50,33 @@ def is_weekend():
 def exchange_rates():
     global cache, cache_timestamp, last_friday_cache
 
-    # Hafta sonuysa ve cuma cache'i boşsa, veri çek ve kaydet
-    if is_weekend():
-        if not last_friday_cache:  # Eğer cuma verisi yoksa
-            try:
-                last_friday_cache = get_exchange_rates()  # Yeni veri çek
-            except NoSuchElementException:
-                return jsonify({"error": "Web element not found. The page structure may have changed."}), 500
-            except TimeoutException:
-                return jsonify({"error": "Request timed out. The page took too long to load."}), 500
-            except Exception as e:
-                return jsonify({"error": str(e)}), 500
-        return jsonify(last_friday_cache)  # Cuma verisini döndür
+    try:
+        # Hafta sonuysa ve cuma cache'i boşsa, veri çek ve kaydet
+        if is_weekend():
+            if not last_friday_cache:  # Eğer cuma verisi yoksa
+                last_friday_cache = get_exchange_rates()
+            return jsonify(last_friday_cache)
 
-    # Hafta içiyse normal önbellek kontrolü
-    if not cache or (time.time() - cache_timestamp > CACHE_DURATION):  # Önbellek süresi dolmuşsa
-        try:
-            cache = get_exchange_rates()  # Yeni veriyi çek
-            cache_timestamp = time.time()  # Yeni zaman damgasını kaydet
+        # Hafta içiyse normal önbellek kontrolü
+        if not cache or (time.time() - cache_timestamp > CACHE_DURATION):  # Önbellek süresi dolmuşsa
+            cache = get_exchange_rates()
+            cache_timestamp = time.time()
 
             # Eğer bugün cuma ise bu veriyi last_friday_cache'e kaydet
             if datetime.now().weekday() == 4:  # Cuma = 4
                 last_friday_cache = cache
-        except NoSuchElementException:
-            return jsonify({"error": "Web element not found. The page structure may have changed."}), 500
-        except TimeoutException:
-            return jsonify({"error": "Request timed out. The page took too long to load."}), 500
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
 
-    # Önbellekteki veriyi döndür
-    return jsonify(cache)
+        # Önbellekteki veriyi döndür
+        return jsonify(cache)
+
+    except NoSuchElementException:
+        return jsonify({"error": "Web element not found. The page structure may have changed."}), 500
+    except TimeoutException:
+        return jsonify({"error": "Request timed out. The page took too long to load."}), 500
+    except Exception as e:
+        # Hata detaylarını logla
+        app.logger.error(f"An error occurred: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/favicon.ico')
 def favicon():
