@@ -1,4 +1,6 @@
 from flask import Flask, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By  # By modülünü içe aktarıyoruz
@@ -9,11 +11,22 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# HTTPS'i zorunlu hale getirme
+# Flask-Limiter yapılandırması
+limiter = Limiter(
+    get_remote_address,  # Kullanıcının IP adresine göre sınır koyar
+    app=app,  # Limiter'ı Flask uygulamasına bağlar
+    default_limits=["3 per minute"],  # sınır: Dakikada 3 istek
+)
+
+@app.errorhandler(429)
+def ratelimit_error(e):
+    return jsonify({"Error": "Too many requests. Please try again later."}), 429
+
 @app.before_request
 def enforce_https():
-    if not request.is_secure:
+    if request.headers.get('X-Forwarded-Proto', 'http') != 'https':
         abort(403)  # Güvensiz bağlantılara izin verme
+
         
 # Önbellek için değişkenler
 cache = None  # Önbelleğe alınan veriler
