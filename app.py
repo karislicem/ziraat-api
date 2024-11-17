@@ -21,10 +21,14 @@ def get_exchange_rates():
 
     # Selenium için Chrome ayarları
     options = Options()
-    options.add_argument('--headless')  # Headless mod
-    options.add_argument('--no-sandbox')  # Bazı sunucu kısıtlamaları için
-    options.add_argument('--disable-dev-shm-usage')  # Düşük bellek kullanımı için
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
 
+    # Google Chrome'un tam yolu
+    options.binary_location = "/usr/bin/google-chrome"
+
+    # WebDriver başlat
     driver = webdriver.Chrome(options=options)
     try:
         driver.get("https://www.ziraatbank.com.tr/tr")
