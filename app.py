@@ -21,6 +21,9 @@ def get_exchange_rates():
     options.add_argument('--headless')  # Headless mod
     options.add_argument('--no-sandbox')  # Sandbox modunu devre dışı bırakır
     options.add_argument('--disable-dev-shm-usage')  # Bellek kullanımını optimize eder
+    options.add_argument('--disable-gpu')  # GPU'yu devre dışı bırakır
+    options.add_argument('--disable-extensions')  # Gereksiz uzantıları devre dışı bırakır
+    options.add_argument('--window-size=1920,1080')  # Tarayıcı pencere boyutunu ayarlar
 
     # Chromium'un tam yolunu belirtin
     options.binary_location = "/usr/bin/chromium-browser"  # Render ortamında Chromium genelde buradadır
