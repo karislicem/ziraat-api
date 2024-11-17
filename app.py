@@ -9,6 +9,12 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# HTTPS'i zorunlu hale getirme
+@app.before_request
+def enforce_https():
+    if not request.is_secure:
+        abort(403)  # Güvensiz bağlantılara izin verme
+        
 # Önbellek için değişkenler
 cache = None  # Önbelleğe alınan veriler
 cache_timestamp = None  # Önbelleğe alınan verilerin zamanı
