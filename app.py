@@ -15,7 +15,7 @@ app = Flask(__name__)
 limiter = Limiter(
     get_remote_address,  # Kullanıcının IP adresine göre sınır koyar
     app=app,  # Limiter'ı Flask uygulamasına bağlar
-    default_limits=["3 per minute"],  # sınır: Dakikada 3 istek
+    default_limits=["10 per minute"],  # sınır: Dakikada 10 istek
 )
 
 @app.errorhandler(429)
