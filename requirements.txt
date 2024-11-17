@@ -3,3 +3,4 @@ Werkzeug==2.2.3
 selenium==4.11.2
 chromedriver-autoinstaller==0.6.4
 gunicorn==20.1.0
+Flask-Limiter==3.0.0
