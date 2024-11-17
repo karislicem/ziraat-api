@@ -16,17 +16,14 @@ CACHE_DURATION = 1800  # Önbelleğin süresi (30 dakika = 1800 saniye)
 
 # Selenium ile döviz kurlarını çekme fonksiyonu
 def get_exchange_rates():
-    # ChromeDriver'ı otomatik kur
+    # ChromeDriver'ı otomatik kurar
     chromedriver_autoinstaller.install()
 
     # Selenium için Chrome ayarları
     options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-
-    # Google Chrome'un tam yolu
-    options.binary_location = "/usr/bin/google-chrome"
+    options.add_argument('--headless')  # Tarayıcıyı görünmez modda çalıştırır
+    options.add_argument('--no-sandbox')  # Sandbox modunu devre dışı bırakır
+    options.add_argument('--disable-dev-shm-usage')  # Bellek kullanımını optimize eder
 
     # WebDriver başlat
     driver = webdriver.Chrome(options=options)
