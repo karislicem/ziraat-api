@@ -1,6 +1,9 @@
 from flask import Flask, jsonify
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__)
 
@@ -9,7 +12,8 @@ def get_exchange_rates():
     options.add_argument('--headless')  # Headless mod
     options.add_argument('--no-sandbox')  # Bazı sunucu kısıtlamaları için
     options.add_argument('--disable-dev-shm-usage')  # Düşük bellek kullanımı için
-    driver = webdriver.Chrome(options=options)
+    service = Service(ChromeDriverManager().install())  # ChromeDriver yolunu otomatik ayarlama
+    driver = webdriver.Chrome(service=service, options=options)
     try:
         driver.get("https://www.ziraatbank.com.tr/tr")
         dolar_alis = driver.find_element(By.XPATH, "//h3[text()='BANKA ALIŞ']/following-sibling::span").text.strip()
@@ -19,6 +23,7 @@ def get_exchange_rates():
         return {"dolar_alis": dolar_alis, "dolar_satis": dolar_satis, "euro_alis": euro_alis, "euro_satis": euro_satis}
     finally:
         driver.quit()
+
 
 @app.route('/api/exchange_rates', methods=['GET'])
 def exchange_rates():
